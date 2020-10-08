@@ -114,11 +114,11 @@ public class SJF {
         if (select == 0) {
             try {// read from SJFInput.txt file
                  // 1st line contains total processes number
-                 // 2nd line is time quantum
-                 // 3rd line: arrival time followed by a space and burst time
-                File fileName = new File("SJFInput.txt"); // CAREFUL WITH .txt FILE PATH
-                // System.out.println(fileName.getAbsolutePath()); // print out
-                // fileName.getAbsolutePath() if you're confused
+                 // 2nd line: arrival time followed by a space and burst time
+                 // CAREFUL WITH .txt FILE PATH
+                File fileName = new File("SJF/SJFInput.txt");
+                // print out fileName.getAbsolutePath() if you're confused
+                // System.out.println(fileName.getAbsolutePath());
                 Scanner scan = new Scanner(fileName);
                 String firstLine = scan.nextLine();
                 int total_process = Integer.parseInt(firstLine);

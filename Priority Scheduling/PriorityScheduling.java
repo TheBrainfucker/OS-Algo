@@ -45,7 +45,11 @@ public class PriorityScheduling {
         while (q_arrival.size() != 0 && q_arrival.peek()[1] == time_elapsed) {
             li_priority.add(q_arrival.poll());
         }
-        li_priority.sort(Comparator.comparingInt(a -> a[3]));// sort list by priority
+        // sort list by priority; low numbers represent low priority
+        Comparator<int[]> compareByPriority0 = (int[] a1, int[] a2) -> Integer.valueOf(a1[3]).compareTo(a2[3]);
+        Collections.sort(li_priority, compareByPriority0.reversed());// Comment out this line & uncomment next line to
+                                                                     // represent low numbers for high priority
+        // Collections.sort(li_priority, compareByPriority0);
 
         int[] temp_proc;
         // run as long as both arrival & waiting queues are not empty
@@ -71,7 +75,13 @@ public class PriorityScheduling {
                         li_priority.add(q_arrival.poll());
                     }
                     if (li_priority.size() != 0) { // new process can arrive or not
-                        li_priority.sort(Comparator.comparingInt(a -> a[3])); // sort by priority
+                        // sort list by priority; low numbers represent low priority
+                        Comparator<int[]> compareByPriority1 = (int[] a1, int[] a2) -> Integer.valueOf(a1[3])
+                                .compareTo(a2[3]);
+                        Collections.sort(li_priority, compareByPriority1.reversed());// Comment out this line &
+                                                                                     // uncomment next line to represent
+                                                                                     // low numbers for high priority
+                        // Collections.sort(li_priority, compareByPriority1);
                         temp_proc = li_priority.get(0);
                         if (temp_proc[2] == temp_proc[4]) { // burst=remaining means 1st time for the process
                             temp_proc[5] = time_elapsed; // set starting time
@@ -85,7 +95,12 @@ public class PriorityScheduling {
                 while (q_arrival.size() != 0 && q_arrival.peek()[1] == time_elapsed) {
                     li_priority.add(q_arrival.poll());
                 }
-                li_priority.sort(Comparator.comparingInt(a -> a[3]));
+                // sort list by priority; low numbers represent low priority
+                Comparator<int[]> compareByPriority2 = (int[] a1, int[] a2) -> Integer.valueOf(a1[3]).compareTo(a2[3]);
+                Collections.sort(li_priority, compareByPriority2.reversed());// Comment out this line & uncomment next
+                                                                             // line to represent low numbers for high
+                                                                             // priority
+                // Collections.sort(li_priority, compareByPriority2);
             }
         }
 
@@ -114,11 +129,11 @@ public class PriorityScheduling {
         if (select == 0) {
             try {// read from PrioritySchedulingInput.txt file
                  // 1st line contains total processes number
-                 // 2nd line is time quantum
-                 // 3rd line: arrival time followed by a space and burst time
-                File fileName = new File("PrioritySchedulingInput.txt"); // CAREFUL WITH .txt FILE PATH
-                // System.out.println(fileName.getAbsolutePath()); // print out
-                // fileName.getAbsolutePath() if you're confused
+                 // 2nd line: arrival time followed by burst time & priority
+                 // CAREFUL WITH .txt FILE PATH
+                File fileName = new File("Priority Scheduling/PrioritySchedulingInput.txt");
+                // print out fileName.getAbsolutePath() if you're confused
+                // System.out.println(fileName.getAbsolutePath());
                 Scanner scan = new Scanner(fileName);
                 String firstLine = scan.nextLine();
                 int total_process = Integer.parseInt(firstLine);

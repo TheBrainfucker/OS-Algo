@@ -151,9 +151,10 @@ public class RoundRobin {
 					// 1st line contains total processes number
 					// 2nd line is time quantum
 					// 3rd line: arrival time followed by a space and burst time
-				File fileName = new File("RoundRobinInput.txt"); // CAREFUL WITH .txt FILE PATH
-				// System.out.println(fileName.getAbsolutePath()); // print out
-				// fileName.getAbsolutePath() if you're confused
+					// CAREFUL WITH .txt FILE PATH
+				File fileName = new File("Round Robin/RoundRobinInput.txt");
+				// print out fileName.getAbsolutePath() if you're confused
+				// System.out.println(fileName.getAbsolutePath());
 				Scanner scan = new Scanner(fileName);
 				String firstLine = scan.nextLine();
 				String secondtLine = scan.nextLine();
