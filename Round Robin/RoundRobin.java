@@ -21,9 +21,8 @@ public class RoundRobin {
 		int[][] proc = new int[process.length][];
 		for (int i = 0; i < process.length; i++) {
 			int[] aMatrix = process[i];
-			int aLength = aMatrix.length;
-			proc[i] = new int[aLength];
-			System.arraycopy(aMatrix, 0, proc[i], 0, aLength);
+			proc[i] = new int[aMatrix.length];
+			System.arraycopy(aMatrix, 0, proc[i], 0, aMatrix.length);
 		}
 
 		// sort cloned array by arrival time
@@ -63,8 +62,7 @@ public class RoundRobin {
 					temp_proc[8] = temp_proc[7] - temp_proc[2]; // waiting = turnaround - burst
 
 					// add other process to waiting queue whose arrival times are less or equal than
-					// the time
-					// elapsed
+					// the time elapsed
 					while (q_arrival.size() != 0 && q_arrival.peek()[1] <= time_elapsed) {
 						q_wait.add(q_arrival.poll());
 					}
@@ -80,8 +78,7 @@ public class RoundRobin {
 					temp_proc[8] = temp_proc[7] - temp_proc[2]; // waiting = turnaround - burst
 
 					// add other process to waiting queue whose arrival times are less or equal than
-					// the time
-					// elapsed
+					// the time elapsed
 					while (q_arrival.size() != 0 && q_arrival.peek()[1] <= time_elapsed) {
 						q_wait.add(q_arrival.poll());
 					}
@@ -92,22 +89,41 @@ public class RoundRobin {
 					time_elapsed += quantum; // increase elapsed time according to quantum
 					temp_proc[3] -= quantum; // decrease remaing time of process
 
-					while (true) {
+					while (q_arrival.size() != 0 && (q_arrival.peek())[1] < time_elapsed) {
 						// add other process to waiting queue whose arrival times are less than the time
 						// elapsed
-						if (q_arrival.size() != 0 && (q_arrival.peek())[1] < time_elapsed) {
-							q_wait.add(q_arrival.poll());
-						} else
-							break;
+						q_wait.add(q_arrival.poll());
 					}
 
 					// add other process to waiting queue whose arrival times are equal to the time
-					// elapsed, but processes with lower process number gets priority while multiple
-					// process are needed to be added to waiting queue at the same time
+					// elapsed, however, processes with lower process number gets priority while
+					// multiple process are needed to be added to waiting queue at the same time
 					if (q_arrival.size() != 0 && (q_arrival.peek())[1] == time_elapsed) {
-						for (int i = 0; i < process.length; i++) {
-							if (process[i][1] == time_elapsed || temp_proc[0] == i) {
-								q_wait.add(process[i]);
+						// 1st Approach
+						boolean temp_proc_in = false; // temp_proc has been inserted or not
+						for (; q_arrival.size() != 0 && (q_arrival.peek())[1] == time_elapsed;) {
+							if (q_arrival.peek()[0] < temp_proc[0] && !temp_proc_in) {
+								q_wait.add(q_arrival.poll());
+							} else if (q_arrival.peek()[0] > temp_proc[0] && !temp_proc_in) {
+								q_wait.add(temp_proc);
+								temp_proc_in = true;
+								q_wait.add(q_arrival.poll());
+							} else if (q_arrival.peek()[0] > temp_proc[0] && temp_proc_in) {
+								q_wait.add(q_arrival.poll());
+							}
+						}
+						if (!temp_proc_in) {
+							q_wait.add(temp_proc);
+							temp_proc_in = true;
+						}
+						
+						// 2nd approach
+						for(int i=0; i<proc.length; i++){
+							if(proc[i][1]==time_elapsed){
+								q_arrival.poll();
+								q_wait.add(proc[i]);
+							}else if(proc[i][0]==temp_proc[0]){
+								q_wait.add(temp_proc);
 							}
 						}
 					} else {// if none of the above cases are true then simply add the present process to
